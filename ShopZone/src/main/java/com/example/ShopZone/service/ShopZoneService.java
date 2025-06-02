@@ -6,8 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
+import com.example.ShopZone.model.Cart;
+import com.example.ShopZone.model.CartItem;
 import com.example.ShopZone.model.Products;
 import com.example.ShopZone.model.User;
+import com.example.ShopZone.repository.CartItemRepository;
+import com.example.ShopZone.repository.CartRepository;
 import com.example.ShopZone.repository.ProductRepository;
 import com.example.ShopZone.repository.UserRepository;
 
@@ -21,6 +25,12 @@ public class ShopZoneService {
 
     @Autowired
     ProductRepository productrepo;
+
+    @Autowired
+    CartRepository cartrepo;
+
+    @Autowired
+    CartItemRepository cartitemrepo;
     
 
     // User CRUD Operations
@@ -139,5 +149,118 @@ public class ShopZoneService {
     }
 
     
+    //Cart CRUD Operations
+    public String  postCart(Cart cart){
+        try{
+            return cartrepo.save(cart) != null ? "Created Successfully" : "error";
+        }catch(Exception e){
+            return e.getMessage();
+        }
+    }
 
+    public List<Cart> getAllCart(){
+        try{
+            return cartrepo.findAll();
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    public Cart getCartById(Long id){
+        try{
+            return cartrepo.findById(id).orElse(null);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String updateCartById(Long id, Cart updatedCart){
+        try{
+            return cartrepo.findById(id).map(existingCart ->{
+                existingCart.setCartItems(updatedCart.getCartItems());
+                existingCart.setUser(updatedCart.getUser());
+
+                cartrepo.save(existingCart);
+                return "Updated Successfully";
+            }).orElse("Cart not found");
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String deleteCartById(Long id){
+        try{
+            cartrepo.deleteById(id);
+            return "Deleted Successfully";
+        }catch(Exception e){
+            return e.getMessage();
+        }
+        
+    }
+
+
+
+
+    //CartItem CRUD Operations
+    public String  postCartItem(CartItem cartitem){
+        try{
+            return cartitemrepo.save(cartitem) != null ? "Created Successfully" : "error";
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<CartItem> getAllCartItem(){
+        try{
+            return cartitemrepo.findAll();
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    public CartItem getCartItemById(Long id){
+        try{
+            return cartitemrepo.findById(id).orElse(null);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String updateCartItemById(Long id, CartItem cartitem){
+        try{
+            return cartitemrepo.findById(id).map(existingCartItem ->{
+                existingCartItem.setCart(cartitem.getCart());
+                existingCartItem.setProducts(cartitem.getProducts());
+                existingCartItem.setQuantity(cartitem.getQuantity());
+
+
+                cartitemrepo.save(existingCartItem);
+                return "Updated Successfully";
+            }).orElse("Cart not found");
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String deleteCartItemById(Long id){
+        try{
+            cartitemrepo.deleteById(id);
+            return "Deleted Successfully";
+        }catch(Exception e){
+            return e.getMessage();
+        }
+        
+    }
+    
 }

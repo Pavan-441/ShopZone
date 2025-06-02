@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.ShopZone.model.Cart;
+import com.example.ShopZone.model.CartItem;
 import com.example.ShopZone.model.Products;
 import com.example.ShopZone.model.User;
 import com.example.ShopZone.service.ShopZoneService;
@@ -76,7 +78,61 @@ public class ShopZoneController {
         return service.deleteProductById(id);
     }
 
-    
+
+    //CRUD operations for Cart Table
+
+    @PostMapping("/cart")
+    public String postCartDetails(@RequestBody Cart cart){
+        return service.postCart(cart);
+    }
+
+    @GetMapping("/cart")
+    public List<Cart> getAllCartDetails(){
+        return service.getAllCart();
+    }
+
+    @GetMapping("/cart/{id}")
+    public Cart getCartDetailsById(@PathVariable Long id){
+        return service.getCartById(id);
+    }
+
+    @PutMapping("/cart/{id}")
+    public String updateCartDetailsById(@PathVariable Long id, @RequestBody Cart cart){
+        return service.updateCartById(id, cart);
+    }
+
+    @DeleteMapping("/cart/{id}")
+    public String deleteCartDetailsById(@PathVariable Long id){
+        return service.deleteCartById(id);
+    }
+
+
+        //CRUD operations for CartItem Table
+
+    @PostMapping("/cartitem")
+    public String postCartItemDetails(@RequestBody CartItem cartitem){
+        return service.postCartItem(cartitem);
+    }
+
+    @GetMapping("/cartitem")
+    public List<CartItem> getAllCartItemDetails(){
+        return service.getAllCartItem();
+    }
+
+    @GetMapping("/cartitem/{id}")
+    public CartItem getCartItemDetailsById(@PathVariable Long id){
+        return service.getCartItemById(id);
+    }
+
+    @PutMapping("/cartitem/{id}")
+    public String updateCartItemDetailsById(@PathVariable Long id, @RequestBody CartItem cartitem){
+        return service.updateCartItemById(id, cartitem);
+    }
+
+    @DeleteMapping("/cartitem/{id}")
+    public String deleteCartItemDetailsById(@PathVariable Long id){
+        return service.deleteCartItemById(id);
+    }
 
 
 }
